@@ -35,17 +35,46 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: simple.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            onTap: () {
-              Get.to(simple[index].$2);
-            },
-            title: Text(simple[index].$1),
-          );
-        },
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Rive Examples'),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: 'Simple'),
+              Tab(text: 'Input'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            // Simple Tab
+            ListView.builder(
+              itemCount: simple.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  onTap: () {
+                    Get.to(simple[index].$2);
+                  },
+                  title: Text(simple[index].$1),
+                );
+              },
+            ),
+            // Input Tab
+            ListView.builder(
+              itemCount: input.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  onTap: () {
+                    Get.to(input[index].$2);
+                  },
+                  title: Text(input[index].$1),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
