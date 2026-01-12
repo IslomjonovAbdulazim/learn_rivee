@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:learn_rivee/result/rive_controller.dart';
 import 'package:rive/rive.dart';
 
-import '../result/rive_service.dart';
+import '../result/rive_viewer.dart';
 
 class VilkaSimple extends StatefulWidget {
   const VilkaSimple({super.key});
@@ -21,7 +22,7 @@ class _VilkaSimpleState extends State<VilkaSimple> {
           child: Column(
             children: [
               RiveViewer(
-                path: 'assets/input/thurtdeath.riv',
+                path: 'assets/simple/vilka.riv',
               ),
             ],
           ),

@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_rivee/result/rive_controller.dart';
+import 'package:learn_rivee/result/rive_viewer.dart';
 
-import '../result/rive_viewer.dart';
-
-class ThrustdeathInput extends StatefulWidget {
-  const ThrustdeathInput({super.key});
+class WaterInput extends StatefulWidget {
+  const WaterInput({super.key});
 
   @override
-  State<ThrustdeathInput> createState() => _ThrustdeathInputState();
+  State<WaterInput> createState() => _WaterInputState();
 }
 
-class _ThrustdeathInputState extends State<ThrustdeathInput> {
+class _WaterInputState extends State<WaterInput> {
+  bool waterOn = false;
   final rive = RiveAppController();
 
   @override
@@ -23,26 +23,21 @@ class _ThrustdeathInputState extends State<ThrustdeathInput> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Thrustdeath")),
+      appBar: AppBar(title: Text("Water")),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
             children: [
               RiveViewer(
-                path: 'assets/input/thurtdeath.riv',
+                path: "assets/input/water.riv",
                 controller: rive,
               ),
               Spacer(),
               CupertinoButton(
                 onPressed: () {
-                  rive.trigger("click ri");
-                },
-                child: Text("Press"),
-              ),
-              CupertinoButton(
-                onPressed: () {
-                  rive.setBool("HV 1", false);
+                  waterOn = !waterOn;
+                  rive.setBool("water on", waterOn);
                 },
                 child: Text("Press"),
               ),
