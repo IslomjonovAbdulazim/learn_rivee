@@ -1,36 +1,49 @@
+import 'package:rive/rive.dart' as rive; // 1. Use 'as rive' to avoid naming conflicts
 import 'package:rive/rive.dart';
 
 class RiveAppController {
   RiveWidgetController? _riveController;
 
+  // 👂 Updated Listener: We pass the event Name and the raw Event object
+  Function(String eventName, rive.Event event)? onEvent;
+
   void attach(RiveWidgetController controller) {
     _riveController = controller;
+
+    // 2. Correct Class Name: rive.Event
+    _riveController?.stateMachine?.addEventListener(_handleRiveEvent);
   }
 
   void dispose() {
+    _riveController?.stateMachine?.removeEventListener(_handleRiveEvent);
     _riveController = null;
+    onEvent = null;
+  }
+
+  // 3. Fix: Use 'rive.Event' instead of 'RiveEvent'
+  void _handleRiveEvent(rive.Event event) {
+    if (onEvent != null) {
+      // 4. Pass it to your UI
+      onEvent!(event.name, event);
+    }
   }
 
   // --- ACTIONS ---
 
   void trigger(String inputName) {
-    // 1. Get the trigger input
+    // Note: In 0.14.x, we assume the input exists.
+    // If you need safety, check 'controller.inputs' documentation.
     final input = _riveController?.stateMachine?.trigger(inputName);
-    // 2. Fire it
     input?.fire();
   }
 
   void setBool(String inputName, bool value) {
-    // 1. Get the boolean input
     final input = _riveController?.stateMachine?.boolean(inputName);
-    // 2. Set the value
     input?.value = value;
   }
 
   void setNumber(String inputName, double value) {
-    // 1. Get the number input
     final input = _riveController?.stateMachine?.number(inputName);
-    // 2. Set the value
     input?.value = value;
   }
 }

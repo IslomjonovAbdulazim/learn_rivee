@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:learn_rivee/input/score_input.dart';
 import 'package:learn_rivee/input/thrustdeath_input.dart';
+import 'package:learn_rivee/input/timer_input.dart';
 import 'package:learn_rivee/jctoon/fireworks_jctoon.dart';
 import 'package:learn_rivee/jctoon/timer_jctoon.dart';
 import 'package:learn_rivee/input/water_input.dart';
@@ -37,6 +38,7 @@ class HomePage extends StatelessWidget {
     ("Thurstdeath", ThrustdeathInput()),
     ("Water", WaterInput()),
     ("Score", ScoreInput()),
+    ("Timer", TimerInput()),
   ];
 
   final jcToon = [

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
-import 'rive_controller.dart'; // Import your controller
+import 'rive_controller.dart';
 
 class RiveViewer extends StatefulWidget {
   final String path;
   final Fit fit;
   final double? width;
   final double? height;
-  final RiveAppController? controller; // <--- ADDED THIS
+  final RiveAppController? controller;
 
   const RiveViewer({
     super.key,
@@ -15,7 +15,7 @@ class RiveViewer extends StatefulWidget {
     this.fit = Fit.cover,
     this.width = 400,
     this.height = 400,
-    this.controller, // <--- Accept it here
+    this.controller,
   });
 
   @override
@@ -23,15 +23,26 @@ class RiveViewer extends StatefulWidget {
 }
 
 class _RiveViewerState extends State<RiveViewer> {
+  // ⚡️ GLOBAL CACHE: Keeps files in memory for the whole app life
+  static final Map<String, FileLoader> _globalCache = {};
+
   late final FileLoader _loader;
 
   @override
   void initState() {
     super.initState();
-    _loader = FileLoader.fromAsset(
-      widget.path,
-      riveFactory: Factory.rive,
-    );
+
+    // 1. Check if we already loaded this file before
+    if (_globalCache.containsKey(widget.path)) {
+      _loader = _globalCache[widget.path]!;
+    } else {
+      // 2. If not, load it and save it to the cache
+      _loader = FileLoader.fromAsset(
+        widget.path,
+        riveFactory: Factory.rive,
+      );
+      _globalCache[widget.path] = _loader;
+    }
   }
 
   @override
@@ -42,20 +53,17 @@ class _RiveViewerState extends State<RiveViewer> {
       child: RiveWidgetBuilder(
         fileLoader: _loader,
         builder: (context, state) => switch (state) {
-          RiveLoading() => const SizedBox(), // Keep it clean
-          RiveFailed() => const Icon(Icons.broken_image),
-
+          RiveLoading() => const SizedBox(),
+          RiveFailed() => const Icon(Icons.broken_image, color: Colors.red),
+        // 🚀 Now this appears instantly because it's cached!
           RiveLoaded() => _buildLoaded(state.controller),
         },
       ),
     );
   }
 
-  // Helper to connect the controller cleanly
   Widget _buildLoaded(RiveWidgetController riveCtrl) {
-    // MAGIC: We connect the user's controller to the actual Rive engine
     widget.controller?.attach(riveCtrl);
-
     return RiveWidget(
       controller: riveCtrl,
       fit: widget.fit,
